@@ -1,0 +1,73 @@
+C6 Data
+Max:  1013
+Min:  325
+Average:  637.0084033613446
+Median:  622
+Average # 4 Star Characters:  59.588235294117645
+Average # 4 Star Weapons:  23.521008403361346
+Average # 5 Star Character:  10.554621848739496
+Average $ Cost with Starglitter:  1086.8269915966387
+Average $ Cost without Starglitter:  1261.2766386554622
+
+
+
+R5 Data
+Max:  1160
+Min:  208
+Average:  545.2083333333334
+Median:  496.0
+Average # 4 Star Character:  13.5625
+Average # 4 Star Weapons:  62.791666666666664
+Average # 5 Star Weapons:  9.729166666666666
+Average $ Cost with Starglitter:  968.3602500000001
+Average $ Cost without Starglitter:  1079.5125
+
+
+
+Limited Character Data
+Max:  165
+Min:  1
+Average:  92.40664961636828
+Median:  80
+Average # 4 Star Character:  8.281329923273658
+Average # 4 Star Weapon:  3.2549019607843137
+Average # 5 Star Character:  1.4867860187553281
+Average $ Cost with Starglitter:  162.06257800511509
+Average $ Cost without Starglitter:  182.9651662404092
+
+
+
+Limited Weapon Data
+Max:  208
+Min:  1
+Average:  102.6470588235294
+Median:  86
+Average # 4 Star Character:  2.671280276816609
+Average # 4 Star Weapon:  12.356401384083044
+Average # 5 Star Weapon:  1.9515570934256055
+Average $ Cost with Starglitter:  184.39760553633215
+Average $ Cost without Starglitter:  203.24117647058821
+
+
+
+Any 5Star Character Data
+Max:  86
+Min:  1
+Average:  62.119788918205806
+Median:  76
+Average # 4 Star Character:  5.546701846965699
+Average # 4 Star Weapon:  2.1857519788918207
+Average $ Cost with Starglitter:  110.2835968337731
+Average $ Cost without Starglitter:  122.9971820580475
+
+
+
+Any 5Star Weapon Data
+Max:  72
+Min:  1
+Average:  52.30244755244755
+Median:  65.0
+Average # 4 Star Character:  1.3653846153846154
+Average # 4 Star Weapon:  6.293706293706293
+Average $ Cost with Starglitter:  95.87076923076923
+Average $ Cost without Starglitter:  103.55884615384616
