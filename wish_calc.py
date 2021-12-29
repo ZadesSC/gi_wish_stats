@@ -3,6 +3,7 @@
 import pandas as pd
 import os
 import statistics
+import traceback
 from datetime import datetime
 
 limited_5_star=["Venti", "Klee", "childe", "Zhongli", "Albedo", "Ganyu", "Xiao", "Hu Tao", "Eula", "Kaedehara Kazuha", "Kamisato Ayaka", "Yoimiya", "Raiden Shogun"]
@@ -265,23 +266,25 @@ def gather_5_star_new_weapon_stats(filename):
 
 def get_paimon_moe_character_data():
     cwd = os.getcwd()
-    for filename in os.listdir(cwd):
+    for filename in os.listdir(cwd + "/xlsx"):
         if filename.endswith(".xlsx"):
             print(filename)
             try:
-                total_c6_counts.extend(gather_5_star_character_stats(filename))
+                total_c6_counts.extend(gather_5_star_character_stats("xlsx/" + filename))
             except:
                 print("Error with file ", filename)
+                print(traceback.format_exc())
 
 def get_paimon_moe_weapon_new_data():
     cwd = os.getcwd()
-    for filename in os.listdir(cwd):
+    for filename in os.listdir(cwd + "/xlsx"):
         if filename.endswith(".xlsx"):
             print(filename)
             try:
-                total_r5_new_counts.extend(gather_5_star_new_weapon_stats(filename))
+                total_r5_new_counts.extend(gather_5_star_new_weapon_stats("xlsx/" + filename))
             except:
                 print("Error with file ", filename)
+                print(traceback.format_exc())
 
 
 if __name__ == '__main__':
