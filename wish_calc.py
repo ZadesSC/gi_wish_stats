@@ -6,7 +6,7 @@ import statistics
 import traceback
 from datetime import datetime
 
-limited_5_star=["Venti", "Klee", "childe", "Zhongli", "Albedo", "Ganyu", "Xiao", "Hu Tao", "Eula", "Kaedehara Kazuha", "Kamisato Ayaka", "Yoimiya", "Raiden Shogun"]
+limited_5_star=["Venti", "Klee", "Tartaglia", "Zhongli", "Albedo", "Ganyu", "Xiao", "Hu Tao", "Eula", "Kaedehara Kazuha", "Kamisato Ayaka", "Yoimiya", "Raiden Shogun", "Sangonomiya Kokomi", "Arataki Itto", "Shenhe"]
 
 character_roll = []
 weapon_roll = []
@@ -43,6 +43,8 @@ r5_old_5_star_counts = []
 r5_new_5_star_counts = []
 
 
+standard_5_star_weapons = ["Amos' Bow", "Lost Prayer to the Sacred Winds", "Primordial Jade Winged-Spear", "Wolf's Gravestone", "Aquila Favonia", "Skyward Harp", "Skyward Spine", "Skyward Atlas", "Skyward Pride", "Skyward Blade"]
+
 limited_5_star_weapons_old=[["2020-11-10", "2020-11-29", 1, "Memory of Dust"],
                             ["2020-12-01", "2020-12-22", 2, "Vortex Vanquisher", "The Unforged"],
                             ["2020-12-22", "2021-01-11", 1, "Summit Shaper"],
@@ -54,7 +56,8 @@ limited_5_star_weapons_old=[["2020-11-10", "2020-11-29", 1, "Memory of Dust"],
                             ["2021-06-31", "2021-07-18", 1, "Freedom-Sworn"]]
 limited_5_star_weapons_new=[["2021-07-20", "2021-08-09", 1, "Mistsplitter Reforged"],
                             ["2021-08-09", "2021-08-31", 1, "Thundering Pulse"],
-                            ["2021-08-31", "2021-09-20", 2, "Engulfing Lightning", "The Unforged"]]
+                            ["2021-08-31", "2021-09-20", 2, "Engulfing Lightning", "The Unforged"],
+                            ["2021-09-20", "2021-10-11", 2, "Everlasting Moonglow", "Primordial Jade Cutter"]]
 
 def gather_5_star_character_stats(filename):
 
@@ -161,6 +164,9 @@ def gather_5_star_new_weapon_stats(filename):
     r5_copies_1 = 0
     r5_copies_2 = 0
 
+    weapon_dict = {}
+    weapon_last_r5_num_roll_dict = {}
+
     temp_any_weapon_4_star_character_counts = 0
     temp_limited_weapon_4_star_character_counts = 0
     temp_r5_4_star_character_counts = 0
@@ -178,20 +184,42 @@ def gather_5_star_new_weapon_stats(filename):
         row_time = datetime.fromisoformat(row["Time"])
         
         # Sanity check for array size
-        if current_banner_index >= len(limited_5_star_weapons_new):
-            break
+        # if current_banner_index >= len(limited_5_star_weapons_new):
+        #     break
         
         # Skip this row if the time is before new banner time
         if row_time < datetime.fromisoformat(limited_5_star_weapons_new[0][0]):
             continue
 
         # If our time is greater than current banner time, increment banner and reset counts
-        while row_time > datetime.fromisoformat(limited_5_star_weapons_new[current_banner_index][1]):
-            current_banner_index += 1
-            if current_banner_index >= len(limited_5_star_weapons_new):
-                break
+        # while row_time > datetime.fromisoformat(limited_5_star_weapons_new[current_banner_index][1]):
+        #     current_banner_index += 1
+        #     if current_banner_index >= len(limited_5_star_weapons_new):
+        #         break
+        #     r5_copies_1 = 0
+        #     r5_copies_2 = 0
+        #     limited_pity_counter = 0
+
+        #     temp_any_weapon_4_star_character_counts = 0
+        #     temp_limited_weapon_4_star_character_counts = 0
+        #     temp_r5_4_star_character_counts = 0
+
+        #     temp_any_weapon_4_star_weapon_counts = 0
+        #     temp_limited_weapon_4_star_weapon_counts = 0
+        #     temp_r5_4_star_weapon_counts = 0
+
+        #     temp_limited_weapon_5_star_counts = 0
+        #     temp_r5_5_star_counts = 0
+        
+        # If the #Roll is 1 then it means this is a new banner
+        if row["#Roll"] == 1:
+
             r5_copies_1 = 0
             r5_copies_2 = 0
+            
+            weapon_dict = {}
+            weapon_last_r5_num_roll_dict = {}
+            
             limited_pity_counter = 0
 
             temp_any_weapon_4_star_character_counts = 0
@@ -205,6 +233,7 @@ def gather_5_star_new_weapon_stats(filename):
             temp_limited_weapon_5_star_counts = 0
             temp_r5_5_star_counts = 0
         
+
         if current_banner_index >= len(limited_5_star_weapons_new):
                 break
         
@@ -223,8 +252,13 @@ def gather_5_star_new_weapon_stats(filename):
             temp_any_weapon_4_star_weapon_counts = 0
 
             # Since so far all the new weapon banners has only 1 limited weapon, we just pick that
-            if weapon_name in limited_5_star_weapons_new[current_banner_index][3]:
+            if weapon_name not in standard_5_star_weapons:
                 r5_copies_1 += 1
+
+                if weapon_name in weapon_dict:
+                    weapon_dict[weapon_name] += 1
+                else:
+                    weapon_dict[weapon_name] = 1
 
                 limited_pity_counter += row["Pity"]
                 limited_weapon_roll.append(limited_pity_counter)
@@ -238,9 +272,19 @@ def gather_5_star_new_weapon_stats(filename):
                 limited_weapon_5_star_counts.append(temp_limited_weapon_5_star_counts)
                 temp_limited_weapon_5_star_counts = 0
 
-                if r5_copies_1 == 5:
-                    r5_counts.append(row["#Roll"])
+                if weapon_dict[weapon_name] == 5:
+                    
+                    if weapon_name not in weapon_last_r5_num_roll_dict:
+                        r5_counts.append(row["#Roll"])
+                        weapon_last_r5_num_roll_dict[weapon_name] = row['#Roll']
+                    else:
+                        r5_counts.append(row["#Roll"] - weapon_last_r5_num_roll_dict[weapon_name])
+                        weapon_last_r5_num_roll_dict[weapon_name] = row['#Roll']
+                    
+                    print(weapon_name, " C6: ", weapon_last_r5_num_roll_dict[weapon_name])
+
                     r5_copies_1 = 0
+                    weapon_dict[weapon_name] == 0
 
                     r5_new_4_star_character_counts.append(temp_r5_4_star_character_counts)
                     r5_new_4_star_weapon_counts.append(temp_r5_4_star_weapon_counts)
@@ -286,10 +330,28 @@ def get_paimon_moe_weapon_new_data():
                 print("Error with file ", filename)
                 print(traceback.format_exc())
 
+def get_paimon_moe_character_data_zades():
+    cwd = os.getcwd()
+
+    try:
+        total_c6_counts.extend(gather_5_star_character_stats("xlsx/Zades.xlsx"))
+    except:
+        print(traceback.format_exc())
+
+def get_paimon_moe_weapon_new_data_zades():
+    cwd = os.getcwd()
+    try:
+        total_r5_new_counts.extend(gather_5_star_new_weapon_stats("xlsx/Zades.xlsx"))
+    except:
+        print(traceback.format_exc())
+
 
 if __name__ == '__main__':
     get_paimon_moe_character_data()
     get_paimon_moe_weapon_new_data()
+
+    #get_paimon_moe_character_data_zades()
+    #get_paimon_moe_weapon_new_data_zades()
 
 
     print("C6 Data")
